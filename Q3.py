@@ -37,7 +37,7 @@ def simulate_competition(v_s, Km_s, r_s, d_s):
         Xp = sol.y[0, -1] / DILUTION
         Xs = sol.y[1, -1] / DILUTION
         R  = R0
-    return Xs / Xp
+    return (Xs - Xp) / (Xs + Xp)
 
 # --- Parameter sweeps ---
 # 1) SYN v_max
@@ -53,32 +53,32 @@ r_s_vals = np.linspace(0.5e-6, 5e-6, 50)
 ratio_r = [simulate_competition(v_s0, Km_s0, r, d_s0) for r in r_s_vals]
 
 # 4) SYN death rate
-d_s_vals = np.linspace(0.001, 0.3, 50)
+d_s_vals = np.linspace(0.0, 0.3, 50)
 ratio_d = [simulate_competition(v_s0, Km_s0, r_s0, ds) for ds in d_s_vals]
 
 # --- Plotting results ---
 fig, axs = plt.subplots(2, 2, figsize=(12, 8))
 
 axs[0,0].plot(v_s_vals, ratio_v, '-o')
-axs[0,0].axhline(1, color='gray', ls='--')
+axs[0,0].axhline(0, color='gray', ls='--')
 axs[0,0].set(title='Effect of SYN v_max',
              xlabel='SYN v_max (1/day)',
              ylabel='X_s/X_p after 7 transfers')
 
 axs[0,1].plot(Km_s_vals, ratio_Km, '-o')
-axs[0,1].axhline(1, color='gray', ls='--')
+axs[0,1].axhline(0, color='gray', ls='--')
 axs[0,1].set(title='Effect of SYN K_m',
              xlabel='SYN K_m (µM)',
              ylabel='')
 
 axs[1,0].plot(r_s_vals, ratio_r, '-o')
-axs[1,0].axhline(1, color='gray', ls='--')
+axs[1,0].axhline(0, color='gray', ls='--')
 axs[1,0].set(title='Effect of SYN resource quota',
              xlabel='SYN r (µM/cell)',
              ylabel='')
 
 axs[1,1].plot(d_s_vals, ratio_d, '-o')
-axs[1,1].axhline(1, color='gray', ls='--')
+axs[1,1].axhline(0, color='gray', ls='--')
 axs[1,1].set(title='Effect of SYN death rate',
              xlabel='SYN d (1/day)',
              ylabel='')
